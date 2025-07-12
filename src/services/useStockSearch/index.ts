@@ -1,32 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 
-import type { Option } from '../components/AutocompleteAsync';
-import { TICKER_BASE_URL, TICKER_ENDPOINTS } from '../constants/endpoints';
-import { STOCK_SEARCH } from '../constants/queryKeys';
-import { getAuthHeader } from '../utils/service';
-
-export interface StockDetail {
-  ticker: string;
-  name: string;
-  market: string;
-  locale: string;
-  primary_exchange: string;
-  type: string;
-  active: boolean;
-  currency_name: string;
-  composite_figi: string;
-  share_class_figi: string;
-  last_updated_utc: string;
-  cik?: string;
-}
-
-interface StockSearchResponse {
-  results: StockDetail[];
-  status: string;
-  request_id: string;
-  count: number;
-  next_url: string;
-}
+import type { StockSearchResponse } from './types';
+import type { Option } from '../../components/AutocompleteAsync';
+import { TICKER_BASE_URL, TICKER_ENDPOINTS } from '../../constants/endpoints';
+import { STOCK_SEARCH } from '../../constants/queryKeys';
+import { getAuthHeader } from '../../utils/service';
 
 export const fetchStockSearchQueryKey = (query: string) => [
   STOCK_SEARCH,

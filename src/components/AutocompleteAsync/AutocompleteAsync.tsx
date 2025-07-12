@@ -22,7 +22,7 @@ export const AutocompleteAsync: React.FC<AutocompleteAsyncProps> = ({
   placeholder = 'Search...',
   fetchSuggestions,
   onSelect,
-  debounceDelay = 300,
+  debounceDelay = 500,
 }) => {
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState('');

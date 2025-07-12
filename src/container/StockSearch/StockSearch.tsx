@@ -10,11 +10,11 @@ import {
   fetchStocksBySearch,
   fetchStockSearchQueryKey,
 } from '../../services/useStockSearch';
-import { useStockStore } from '../../store/stockStore';
+import { usePortfolioStore } from '../../store/usePortfolioStore';
 
 export const StockSearch = () => {
   const queryClient = useQueryClient();
-  const setSearchedStock = useStockStore((state) => state.setSearchedStock);
+  const setSearchedStock = usePortfolioStore((state) => state.setSearchedStock);
 
   const fetchSuggestions = useCallback(
     async (query: string): Promise<Option[]> => {
