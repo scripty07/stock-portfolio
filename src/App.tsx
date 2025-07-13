@@ -1,8 +1,9 @@
 import { Header } from './container/Header';
-import Portfolio from './container/Portfolio/Portfolio';
+import { Portfolio } from './container/Portfolio/Portfolio';
+import { Projection } from './container/Projection';
 import { useRefreshPortfolio } from './hooks/useRefreshPortfolio';
 
-function App() {
+export const App = () => {
   useRefreshPortfolio();
 
   return (
@@ -10,13 +11,8 @@ function App() {
       <div className="container mx-auto">
         <Header />
         <Portfolio />
-
-        {/* Container - Table to display  */}
-
-        {/* Container - Cards to display overall portfolio */}
+        <Projection />
       </div>
     </div>
   );
-}
-
-export default App;
+};

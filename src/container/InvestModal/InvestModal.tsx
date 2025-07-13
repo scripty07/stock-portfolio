@@ -1,10 +1,10 @@
 import { useState, type FormEvent } from 'react';
 
 import type { InvestModalProps } from './types';
-import Modal from '../../components/Modal/Modal';
+import { Modal } from '../../components/Modal';
 import type { PortfolioItem } from '../../typings/portfolio';
 
-const InvestModal = (props: InvestModalProps) => {
+export const InvestModal = (props: InvestModalProps) => {
   const { isVisible, selectedStock, onSubmit, onClose } = props;
 
   const [investValue, setInvestValue] = useState(
@@ -50,7 +50,7 @@ const InvestModal = (props: InvestModalProps) => {
             required
             type="number"
             value={investValue}
-            className="w-full border p-2 mb-4 rounded"
+            className="w-full border p-2 mb-4 rounded-xl"
             onChange={(e) => setInvestValue(e.target.value)}
             placeholder={`Enter amount in ${selectedStock.currency.toUpperCase()}`}
           />
@@ -61,14 +61,14 @@ const InvestModal = (props: InvestModalProps) => {
           <button
             type="button"
             onClick={submitInvestment}
-            className="inline-flex w-full transition-colors cursor-pointer justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 sm:ml-3 sm:w-auto"
+            className="inline-flex w-full transition-colors cursor-pointer justify-center rounded-xl bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 sm:ml-3 sm:w-auto"
           >
             Invest
           </button>
           <button
             type="button"
             onClick={cancelInvestment}
-            className="mt-3 inline-flex w-full justify-center transition-colors cursor-pointer rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 sm:mt-0 sm:w-auto"
+            className="mt-3 inline-flex w-full justify-center transition-colors cursor-pointer rounded-xl bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 sm:mt-0 sm:w-auto"
           >
             Cancel
           </button>
@@ -77,5 +77,3 @@ const InvestModal = (props: InvestModalProps) => {
     </Modal>
   );
 };
-
-export default InvestModal;

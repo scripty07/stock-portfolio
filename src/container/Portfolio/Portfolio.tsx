@@ -13,24 +13,27 @@ import { useGetPortfolioColumns } from '../../hooks/useGetPortfolioColumns';
 import { useListenSelectedStock } from '../../hooks/useListenSelectedStock';
 import { usePortfolioStore } from '../../store/usePortfolioStore';
 import type { PortfolioItem } from '../../typings/portfolio';
+import { getFormattedCurrency } from '../../utils/format';
 import { getSortedStocks, getTotalInvested } from '../../utils/portfolio';
-import InvestModal from '../InvestModal/InvestModal';
+import { InvestModal } from '../InvestModal';
 
-const StockTable = () => {
+export const Portfolio = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const { loading } = useListenSelectedStock();
 
-  const [selectedStock, setSelectedStock] = useState<PortfolioItem | null>(
+  const [stockToInvest, setStockToInvest] = useState<PortfolioItem | null>(
     null
   );
 
   const stocks = usePortfolioStore((state) => state.stocks);
+  const selectedStock = usePortfolioStore((state) => state.selectedStock);
   const updateStock = usePortfolioStore((state) => state.updateStock);
+  const setSelectedStock = usePortfolioStore((state) => state.setSelectedStock);
 
   const totalInvestments = useMemo(() => getTotalInvested(stocks), [stocks]);
   const { columns } = useGetPortfolioColumns({
     loading,
-    setSelectedStock,
+    setStockToInvest,
   });
 
   const filteredStocks = useMemo(() => {
@@ -54,7 +57,7 @@ const StockTable = () => {
   };
 
   const closeInvestment = () => {
-    setSelectedStock(null);
+    setStockToInvest(null);
   };
 
   return (
@@ -64,18 +67,13 @@ const StockTable = () => {
         <div className="flex gap-2 items-center">
           <h2>Total Investments - </h2>
           <h2 className="text-blue-400">
-            {totalInvestments
-              ? totalInvestments.toLocaleString('en-US', {
-                  style: 'currency',
-                  currency: stocks[0].currency,
-                })
-              : 'N.A'}
+            {getFormattedCurrency(totalInvestments, stocks[0]?.currency)}
           </h2>
         </div>
       </div>
 
       {table.getRowModel().rows.length === 0 && !loading ? (
-        <div className="text-center py-16">
+        <div className="text-center py-10">
           <h3 className="text-lg font-semibold mb-2">
             No stocks in your portfolio
           </h3>
@@ -85,7 +83,7 @@ const StockTable = () => {
         </div>
       ) : (
         <div className="relative">
-          <table className="w-full border border-gray-300 rounded-lg overflow-hidden">
+          <table className="w-full border border-gray-300 rounded-xl overflow-hidden">
             <thead className="bg-gray-300">
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
@@ -118,21 +116,33 @@ const StockTable = () => {
               ))}
             </thead>
             <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <tr
-                  key={row.id}
-                  className="transition-colors bg-gray-100 hover:bg-gray-200"
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="p-2 border-t border-gray-200">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
+              {table.getRowModel().rows.map((row) => {
+                const currentStock = row.original;
+                const isStockSelected = currentStock.id === selectedStock?.id;
+
+                return (
+                  <tr
+                    key={row.id}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedStock(isStockSelected ? null : currentStock);
+                    }}
+                    className={`cursor-pointer transition-colors ${isStockSelected ? 'bg-blue-200' : 'bg-white hover:bg-gray-200'}`}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <td
+                        key={cell.id}
+                        className="p-2 border-t border-gray-200"
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
 
@@ -147,10 +157,10 @@ const StockTable = () => {
       )}
 
       {/* Modal for Investing */}
-      {!!selectedStock && (
+      {!!stockToInvest && (
         <InvestModal
-          isVisible={!!selectedStock}
-          selectedStock={selectedStock}
+          isVisible={!!stockToInvest}
+          selectedStock={stockToInvest}
           onSubmit={submitInvestment}
           onClose={closeInvestment}
         />
@@ -158,5 +168,3 @@ const StockTable = () => {
     </div>
   );
 };
-
-export default StockTable;

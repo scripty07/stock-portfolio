@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import type { StockSearchResponse } from './types';
-import type { Option } from '../../components/AutocompleteAsync';
+import type { Option } from '../../components/AutocompleteAsync/types';
 import { TICKER_BASE_URL, TICKER_ENDPOINTS } from '../../constants/endpoints';
 import { STOCK_SEARCH } from '../../constants/queryKeys';
 import { getAuthHeader } from '../../utils/service';

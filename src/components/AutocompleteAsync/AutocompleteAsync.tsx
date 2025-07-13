@@ -3,20 +3,12 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import { IoIosSearch } from 'react-icons/io';
 
+import type {
+  AutocompleteAsyncProps,
+  DropdownPortalProps,
+  Option,
+} from './types';
 import { useDebouncedValue } from '../../hooks/useDebouncedValue';
-
-export interface Option {
-  id: string;
-  label: string;
-  disabled?: boolean;
-}
-
-interface AutocompleteAsyncProps {
-  placeholder?: string;
-  fetchSuggestions: (query: string) => Promise<Option[]>;
-  onSelect: (value: Option) => void;
-  debounceDelay?: number;
-}
 
 export const AutocompleteAsync: React.FC<AutocompleteAsyncProps> = ({
   placeholder = 'Search...',
@@ -200,13 +192,7 @@ export const AutocompleteAsync: React.FC<AutocompleteAsyncProps> = ({
   );
 };
 
-interface DropdownPortalProps {
-  visible: boolean;
-  style: React.CSSProperties;
-  children: React.ReactNode;
-}
-
-const DropdownPortal: React.FC<DropdownPortalProps> = ({
+export const DropdownPortal: React.FC<DropdownPortalProps> = ({
   visible,
   style,
   children,
@@ -218,7 +204,7 @@ const DropdownPortal: React.FC<DropdownPortalProps> = ({
   return ReactDOM.createPortal(
     <ul
       id="autocomplete-dropdown"
-      className="bg-white border border-gray-300 rounded-md shadow-md max-h-60 overflow-y-auto"
+      className="bg-white border border-gray-300 rounded-xl shadow-md max-h-60 overflow-y-auto"
       style={style}
     >
       {children}
@@ -226,5 +212,3 @@ const DropdownPortal: React.FC<DropdownPortalProps> = ({
     document.body
   );
 };
-
-export default DropdownPortal;

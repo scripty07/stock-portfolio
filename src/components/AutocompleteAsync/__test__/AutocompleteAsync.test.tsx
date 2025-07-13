@@ -1,7 +1,8 @@
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { AutocompleteAsync, type Option } from '../AutocompleteAsync';
+import { AutocompleteAsync } from '../AutocompleteAsync';
+import type { Option } from '../types';
 
 const mockOptions: Option[] = [
   { id: '1', label: 'Apple' },

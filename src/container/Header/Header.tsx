@@ -1,4 +1,4 @@
-import { BRAND_NAME_LOGO } from '../../constants/commonText';
+import { BRAND_NAME_LOGO } from '../../constants/common';
 import { StockSearch } from '../StockSearch';
 
 export const Header = () => {

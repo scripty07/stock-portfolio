@@ -2,10 +2,8 @@ import { useCallback } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
-import {
-  AutocompleteAsync,
-  type Option,
-} from '../../components/AutocompleteAsync';
+import { AutocompleteAsync } from '../../components/AutocompleteAsync';
+import type { Option } from '../../components/AutocompleteAsync/types';
 import {
   fetchStocksBySearch,
   fetchStockSearchQueryKey,

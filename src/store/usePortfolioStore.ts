@@ -1,18 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import type { PortfolioItem } from '../typings/portfolio';
-
-interface PortfolioStore {
-  isInitialLoad: boolean;
-  stocks: PortfolioItem[];
-  searchedStock: string | null;
-  addStock: (stock: PortfolioItem) => void;
-  updateStock: (stock: PortfolioItem) => void;
-  removeStock: (id: string) => void;
-  setSearchedStock: (stock: string) => void;
-  resetInitialLoad: () => void;
-}
+import type { PortfolioStore } from './types';
 
 export const usePortfolioStore = create<PortfolioStore>()(
   persist(
@@ -20,6 +9,7 @@ export const usePortfolioStore = create<PortfolioStore>()(
       // Values
       stocks: [],
       searchedStock: null,
+      selectedStock: null,
       isInitialLoad: true,
 
       // Actions
@@ -28,6 +18,9 @@ export const usePortfolioStore = create<PortfolioStore>()(
       },
       setSearchedStock: (searchedStock) => {
         set({ searchedStock });
+      },
+      setSelectedStock: (selectedStockId) => {
+        set({ selectedStock: selectedStockId });
       },
       addStock: (stock) => {
         const existing = get().stocks.find((s) => s.id === stock.id);
@@ -44,14 +37,28 @@ export const usePortfolioStore = create<PortfolioStore>()(
           const updatedStocks = [...get().stocks];
           updatedStocks[existingStockIndex] = stock;
 
+          let selectedStock = get().selectedStock;
+
+          if (!!selectedStock && selectedStock.id === stock.id) {
+            selectedStock = stock;
+          }
+
           set({
+            selectedStock,
             searchedStock: null,
             stocks: updatedStocks,
           });
         }
       },
       removeStock: (id) => {
+        let selectedStock = get().selectedStock;
+
+        if (selectedStock?.id === id) {
+          selectedStock = null;
+        }
+
         set({
+          selectedStock,
           searchedStock: null,
           stocks: get().stocks.filter((s) => s.id !== id),
         });
